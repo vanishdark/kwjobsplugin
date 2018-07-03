@@ -54,8 +54,8 @@ function kwjobs_option_page(){?>
     <?php }
     
     function content_creation() {
-        $browserLang = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 5);
-        
+        $browserLang = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'],0,5);
+        echo $browserLang;
         $kw_url = "http://api.cvwarehouse.com/cvwOS_Wondercom/b1d5972d-df98-4f96-8b5d-86367700f93f/Job/own_website/Json1_7";
         $kw_file = file_get_contents($kw_url);
         
@@ -104,13 +104,13 @@ function kwjobs_option_page(){?>
         } else {
             $kw_company = "Wondercom";
             $kw_output = "<table><tbody>";
+            $kw_output = $kw_output."<tr><td>ID</td><td>Emprego</td><td>Local</td><td>Lang</td></tr>";
             foreach ($json as $element) {
                 foreach ($element as $subElement) {
                     
                     switch($subElement["name"]["@lang"]) {
                         case $browserLang:
-
-                            if ($subElement["name"]["@lang"] === $browserLang) {
+                            if ($subElement["name"]["@lang"] === "en-US") {
                                 if($subElement["owner"]["company"]["@internalName"] === $kw_company) {
                                     
                                     $kw_output = $kw_output."<tr>";
@@ -122,14 +122,14 @@ function kwjobs_option_page(){?>
                                     
                                 }
                             }
-                           /* else {
+                           else {
                                     $kw_output = $kw_output."<tr>";
                                     $kw_output = $kw_output."<td>".$subElement["@id"] . "</td>";
                                     $kw_output = $kw_output."<td><a target='_blank' href='".$subElement["urls"]["cleanApplicationUrl"]["#text"]."'>".$subElement["name"]["#text"] . "</a></td>";
                                     $kw_output = $kw_output."<td>".$subElement["place"]["regions"][0]["name"]["#text"]."</td>";
-                                    $kw_output = $kw_output."<td> Portugues</td>";
+                                    
                                     $kw_output = $kw_output."</tr>";
-                            }*/
+                            }
                         break;
                         default:
                                 if ($subElement["name"]["@lang"] === "pt-PT") {
@@ -139,6 +139,7 @@ function kwjobs_option_page(){?>
                                             $kw_output = $kw_output."<td>".$subElement["@id"] . "</td>";
                                             $kw_output = $kw_output."<td><a target='_blank' href='".$subElement["urls"]["cleanApplicationUrl"]["#text"]."'>".$subElement["name"]["#text"] . "</a></td>";
                                             $kw_output = $kw_output."<td>".$subElement["place"]["regions"][0]["name"]["#text"]."</td>";
+                                            $kw_output = $kw_output."<td> Portugues</td>";
                                             $kw_output = $kw_output."</tr>";
                                     }
                                 }
