@@ -18,9 +18,12 @@ function kwjobs_option_menu_page(){
 }
 add_action('admin_menu','kwjobs_option_menu_page');
 
-function kwjobs_option_page(){?>
+function kwjobs_option_page(){
+    global $kw_company;
+    global $kw_default_lang;
+    ?>
     <dic class="wrap">
-    <h1>Knowledgeworks Jobs Plugin Information</h1>
+    <h1><img src="../wp-content/plugins/kwjobsplugin/Images/logo_footer.png" alt="logo">Knowledgeworks Jobs Plugin Information</h1>
     </div>
     <style type="text/css">
     .tg  {border-collapse:collapse;border-spacing:0;border-color:#ccc;}
@@ -47,13 +50,18 @@ function kwjobs_option_page(){?>
     <td class="tg-sprd">Adiciona uma tabela numa página ou post com os empregos disponíveis</td>
     </tr>
     <tr>
-    <td class="tg-baqh">$kw_default_lang</td>
+    <th class="tg-lv9y">Tag</th>
+    <th class="tg-z8ml">Description</th>
+    </tr>
+    <tr>
+    <td class="tg-baqh"><?php echo $kw_default_lang; ?> </td>
     <td class="tg-sprd">Linguagem default apresentada nos empregos.</td>
     </tr>
     <tr>
-    <td class="tg-baqh">$kw_company</td>
+    <td class="tg-baqh"><?php echo $kw_company; ?></td>
     <td class="tg-sprd">Empresa selecionada para mostrar resultados de empregos.</td>
     </tr>
+    
     </table>
     <?php 
 }
