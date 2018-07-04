@@ -15,48 +15,44 @@ function kwjobs_option_menu_page(){
 add_action('admin_menu','kwjobs_option_menu_page');
 
 function kwjobs_option_page(){?>
-<dic class="wrap">
+    <dic class="wrap">
     <h1>Knowledgeworks Jobs Plugin Information</h1>
     </div>
     <style type="text/css">
-.tg  {border-collapse:collapse;border-spacing:0;border-color:#ccc;}
-.tg td{font-family:Arial, sans-serif;font-size:14px;padding:10px 5px;border-style:solid;border-width:0px;overflow:hidden;word-break:normal;border-top-width:1px;border-bottom-width:1px;border-color:#ccc;color:#333;background-color:#fff;}
-.tg th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;padding:10px 5px;border-style:solid;border-width:0px;overflow:hidden;word-break:normal;border-top-width:1px;border-bottom-width:1px;border-color:#ccc;color:#333;background-color:#f0f0f0;}
-.tg .tg-baqh{text-align:center;vertical-align:top}
-.tg .tg-sprd{background-color:#f9f9f9;border-color:#cccccc;vertical-align:top}
-.tg .tg-lv9y{font-weight:bold;background-color:#ff0066;color:#ffffff;text-align:center}
-.tg .tg-z8ml{font-weight:bold;background-color:#ff0066;color:#ffffff;vertical-align:top}
-.tg .tg-yw4l{vertical-align:top}
-.tg .tg-b7b8{background-color:#f9f9f9;vertical-align:top}
-</style>
-<table class="tg" >
-<colgroup>
-<col style="width: 263px">
-<col style="width: 816px">
-</colgroup>
-  <tr>
+    .tg  {border-collapse:collapse;border-spacing:0;border-color:#ccc;}
+    .tg td{font-family:Arial, sans-serif;font-size:14px;padding:10px 5px;border-style:solid;border-width:0px;overflow:hidden;word-break:normal;border-top-width:1px;border-bottom-width:1px;border-color:#ccc;color:#333;background-color:#fff;}
+    .tg th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;padding:10px 5px;border-style:solid;border-width:0px;overflow:hidden;word-break:normal;border-top-width:1px;border-bottom-width:1px;border-color:#ccc;color:#333;background-color:#f0f0f0;}
+    .tg .tg-baqh{text-align:center;vertical-align:top}
+    .tg .tg-sprd{background-color:#f9f9f9;border-color:#cccccc;vertical-align:top}
+    .tg .tg-lv9y{font-weight:bold;background-color:#ff0066;color:#ffffff;text-align:center}
+    .tg .tg-z8ml{font-weight:bold;background-color:#ff0066;color:#ffffff;vertical-align:top}
+    .tg .tg-yw4l{vertical-align:top}
+    .tg .tg-b7b8{background-color:#f9f9f9;vertical-align:top}
+    </style>
+    <table class="tg" >
+    <colgroup>
+    <col style="width: 263px">
+    <col style="width: 816px">
+    </colgroup>
+    <tr>
     <th class="tg-lv9y">Shortcode Tag</th>
     <th class="tg-z8ml">Description</th>
-  </tr>
-  <tr>
+    </tr>
+    <tr>
     <td class="tg-baqh">[kwjobposting]<br></td>
     <td class="tg-sprd">Adiciona uma tabela numa página ou post com os empregos disponíveis</td>
-  </tr>
-  <tr>
+    </tr>
+    <tr>
     <td class="tg-baqh">pt-PT</td>
     <td class="tg-sprd">Linguagem default apresentada nos empregos.</td>
-  </tr>
-  <tr>
-    <td class="tg-baqh">en-US</td>
-    <td class="tg-sprd">Linguagem que é mostrada em casa do utilizador usar o browser em en-US.</td>
-  </tr>
-</table>
+    </tr>
+    </table>
     <?php }
     
     function content_creation() {
         $browserLang = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'],0,5);
-        echo $browserLang;
-        $kw_url = "http://api.cvwarehouse.com/cvwOS_Wondercom/b1d5972d-df98-4f96-8b5d-86367700f93f/Job/own_website/Json1_7";
+        echo ("Current Language: ".$browserLang);
+            $kw_url = "http://api.cvwarehouse.com/cvwOS_Wondercom/b1d5972d-df98-4f96-8b5d-86367700f93f/Job/own_website/Json1_7/".$browserLang;
         $kw_file = file_get_contents($kw_url);
         
         // Try and clean bad chars
@@ -108,50 +104,32 @@ function kwjobs_option_page(){?>
             foreach ($json as $element) {
                 foreach ($element as $subElement) {
                     
-                    switch($subElement["name"]["@lang"]) {
-                        case $browserLang:
-                            if ($subElement["name"]["@lang"] === "en-US") {
-                                if($subElement["owner"]["company"]["@internalName"] === $kw_company) {
-                                    
-                                    $kw_output = $kw_output."<tr>";
-                                    $kw_output = $kw_output."<td>".$subElement["@id"] . "</td>";
-                                    $kw_output = $kw_output."<td><a target='_blank' href='".$subElement["urls"]["cleanApplicationUrl"]["#text"]."'>".$subElement["name"]["#text"] . "</a></td>";
-                                    $kw_output = $kw_output."<td>".$subElement["place"]["regions"][0]["name"]["#text"]."</td>";
-                                    $kw_output = $kw_output."<td> English </td>";
-                                    $kw_output = $kw_output."</tr>";
-                                    
-                                }
-                            }
-                           else {
-                                    $kw_output = $kw_output."<tr>";
-                                    $kw_output = $kw_output."<td>".$subElement["@id"] . "</td>";
-                                    $kw_output = $kw_output."<td><a target='_blank' href='".$subElement["urls"]["cleanApplicationUrl"]["#text"]."'>".$subElement["name"]["#text"] . "</a></td>";
-                                    $kw_output = $kw_output."<td>".$subElement["place"]["regions"][0]["name"]["#text"]."</td>";
-                                    
-                                    $kw_output = $kw_output."</tr>";
-                            }
-                        break;
-                        default:
-                                if ($subElement["name"]["@lang"] === "pt-PT") {
-                                    if($subElement["owner"]["company"]["@internalName"] === $kw_company) {
-                                            
-                                            $kw_output = $kw_output."<tr>";
-                                            $kw_output = $kw_output."<td>".$subElement["@id"] . "</td>";
-                                            $kw_output = $kw_output."<td><a target='_blank' href='".$subElement["urls"]["cleanApplicationUrl"]["#text"]."'>".$subElement["name"]["#text"] . "</a></td>";
-                                            $kw_output = $kw_output."<td>".$subElement["place"]["regions"][0]["name"]["#text"]."</td>";
-                                            $kw_output = $kw_output."<td> Portugues</td>";
-                                            $kw_output = $kw_output."</tr>";
-                                    }
-                                }
-                        break;
-                    }  
-                                
-                }
-
-                $kw_output = $kw_output."</tbody></table>";
+                    if ($subElement["name"]["@lang"] === $browserLang && $subElement["owner"]["company"]["@internalName"] === $kw_company) {
+                        $kw_output = $kw_output."<tr>";
+                        $kw_output = $kw_output."<td>".$subElement["@id"] . "</td>";
+                        $kw_output = $kw_output."<td><a target='_blank' href='".$subElement["urls"]["cleanApplicationUrl"]["#text"]."'>".$subElement["name"]["#text"] . "</a></td>";
+                        $kw_output = $kw_output."<td>".$subElement["place"]["regions"][0]["name"]["#text"]."</td>";
+                        //$kw_output = $kw_output."<td> English </td>";
+                        $kw_output = $kw_output."</tr>";
+                    }
+                    else {
+                        if($subElement["owner"]["company"]["@internalName"] === $kw_company){
+                            $kw_output = $kw_output."<tr>";
+                            $kw_output = $kw_output."<td>".$subElement["@id"] . "</td>";
+                            $kw_output = $kw_output."<td><a target='_blank' href='".$subElement["urls"]["cleanApplicationUrl"]["#text"]."'>".$subElement["name"]["#text"] . "</a></td>";
+                            $kw_output = $kw_output."<td>".$subElement["place"]["regions"][0]["name"]["#text"]."</td>";
+                            $kw_output = $kw_output."</tr>";
+                        }
+                    }
+                    
+                }  
+                
             }
-                        
-                        return $kw_output;
-        }}
-        add_shortcode('kwjobposting', 'content_creation');
-?>
+            
+            $kw_output = $kw_output."</tbody></table>";
+        }
+        
+        return $kw_output;
+    }
+    add_shortcode('kwjobposting', 'content_creation');
+    ?>
